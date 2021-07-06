@@ -93,7 +93,7 @@ if(NOT BUILD_SHARED_LIBS)
     set_target_properties(${LIB_NAME} PROPERTIES INTERFACE_COMPILE_DEFINITIONS CURL_STATICLIB)
 endif()
 
-target_link_libraries(${LIB_NAME} ${CURL_LIBS})
+target_link_libraries(${LIB_NAME} PUBLIC ${CURL_LIBS})
 
 set_target_properties(${LIB_NAME} PROPERTIES
   COMPILE_DEFINITIONS BUILDING_LIBCURL
@@ -123,6 +123,9 @@ if(WIN32)
       # the statically linked "libcurl.lib"
       set_target_properties(${LIB_NAME} PROPERTIES IMPORT_SUFFIX "_imp.lib")
     endif()
+  else()
+    # Add CURL_STATICLIB to compile definitions if the libcurl is built statically
+    target_compile_definitions(${LIB_NAME} PUBLIC "CURL_STATICLIB")
   endif()
 endif()
 
@@ -135,6 +138,7 @@ install(TARGETS ${LIB_NAME}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${INCLUDE_INSTALL_DIR}
 )
 
 export(TARGETS ${LIB_NAME}
