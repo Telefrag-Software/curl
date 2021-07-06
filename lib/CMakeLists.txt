@@ -151,6 +151,9 @@ if(WIN32)
       # the statically linked "libcurl.lib"
       set_target_properties(${LIB_NAME} PROPERTIES IMPORT_SUFFIX "_imp.lib")
     endif()
+  else()
+    # Add CURL_STATICLIB to compile definitions if the libcurl is built statically
+    target_compile_definitions(${LIB_NAME} PRIVATE "CURL_STATICLIB")
   endif()
 endif()
 
@@ -164,6 +167,7 @@ if(CURL_ENABLE_EXPORT_TARGET)
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${INCLUDE_INSTALL_DIR}
   )
 
   export(TARGETS ${LIB_NAME}

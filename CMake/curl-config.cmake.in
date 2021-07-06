@@ -23,12 +23,36 @@
 ###########################################################################
 @PACKAGE_INIT@
 
-include(CMakeFindDependencyMacro)
-if(@USE_OPENSSL@)
-  find_dependency(OpenSSL @OPENSSL_VERSION_MAJOR@)
-endif()
-if(@USE_ZLIB@)
-  find_dependency(ZLIB @ZLIB_VERSION_MAJOR@)
+if(HUNTER_ENABLED)
+
+  if("@ENABLE_ARES@")
+    find_package(c-ares CONFIG REQUIRED)
+  endif()
+
+  if(@HAVE_ZLIB@)
+      find_package(ZLIB CONFIG REQUIRED)
+  endif()
+
+  if(@HAVE_LIBSSH2@)
+      find_package(Libssh2 CONFIG REQUIRED)
+  endif()
+
+  if(@USE_OPENSSL@)
+      find_package(OpenSSL REQUIRED)
+  endif()
+
+else()
+
+  include(CMakeFindDependencyMacro)
+
+  if(@USE_OPENSSL@)
+    find_dependency(OpenSSL @OPENSSL_VERSION_MAJOR@)
+  endif()
+
+  if(@USE_ZLIB@)
+    find_dependency(ZLIB @ZLIB_VERSION_MAJOR@)
+  endif()
+
 endif()
 
 include("${CMAKE_CURRENT_LIST_DIR}/@TARGETS_EXPORT_NAME@.cmake")
