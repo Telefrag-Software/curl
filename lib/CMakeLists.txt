@@ -186,6 +186,9 @@ if(BUILD_SHARED_LIBS)
     if(HIDES_CURL_PRIVATE_SYMBOLS)
       set_property(TARGET ${LIB_SHARED} APPEND PROPERTY SOURCES "${CURL_SOURCE_DIR}/libcurl.def")
     endif()
+  else()
+    # Add CURL_STATICLIB to compile definitions if the libcurl is built statically
+    target_compile_definitions(${LIB_NAME} PRIVATE "CURL_STATICLIB")
   endif()
   target_link_libraries(${LIB_SHARED} PRIVATE ${CURL_LIBS})
   # Remove the "lib" prefix since the library is already named "libcurl".
@@ -230,6 +233,7 @@ if(CURL_ENABLE_EXPORT_TARGET)
       ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
       LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
       RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${INCLUDE_INSTALL_DIR}
     )
   endif()
 
